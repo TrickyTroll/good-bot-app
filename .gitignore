@@ -130,3 +130,9 @@ dmypy.json
 
 # Testing dir
 toto
+
+# Macos stuff
+.DS_Store
+
+# Vscode config
+.vscode

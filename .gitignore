@@ -47,3 +47,5 @@ _testmain.go
 /test/times.out
 
 /data/*
+
+run.sh

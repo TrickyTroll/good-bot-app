@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path/filepath"
 	"regexp"
 )
 
@@ -36,6 +37,49 @@ func (p *Page) saveYaml() error {
 }
 */
 
+func getScenesAmount(title string) (int, error) {
+	files, err := filepath.Glob("data/" + title + "/" + "scene_*")
+	fmt.Println(files)
+	if err != nil {
+		return -1, err
+	}
+	return len(files), nil
+}
+
+func getCastsAmount(title string, scene string) (int, error) {
+	files, err := filepath.Glob("data/" + title + "/" + scene + "/" + "asciicasts" + "/" + "file_*")
+	fmt.Println(files)
+	if err != nil {
+		log.Print(err)
+		return -1, err
+	}
+	return len(files), nil
+}
+
+func loadProject(title string) (*Project, error) {
+	scenesAmount, err := getScenesAmount(title)
+	if err != nil {
+		return nil, err
+	}
+	allScenes := make(map[int][]int)
+	for i := 0; i < scenesAmount; i++ {
+		sceneTitle := fmt.Sprintf("scene_%d", i+1)
+		castsAmount, err := getCastsAmount(title, sceneTitle)
+		if err != nil {
+			log.Printf("The scene '%s' did not contain any recording", sceneTitle)
+			continue
+		} else if castsAmount > 0 { // Empty scenes are ignored.
+			var allCasts []int
+			for j := 0; j < castsAmount; j++ {
+				allCasts = append(allCasts, j)
+			}
+			allScenes[i+1] = allCasts
+		}
+	}
+	fmt.Println(allScenes)
+	return &Project{Title: title, Scenes: allScenes}, nil
+}
+
 func loadPage(title string) (*Page, error) {
 	filename := "data/" + title + ".txt"
 	body, err := ioutil.ReadFile(filename)
@@ -45,40 +89,6 @@ func loadPage(title string) (*Page, error) {
 	return &Page{Title: title, Body: body}, nil // Check second return value for errors.
 	// Returns pointer to page filled
 	// with correct info.
-}
-
-func getScenesAmount(title string) int {
-	files, err := ioutil.ReadDir("data/" + title)
-	if err != nil {
-		return 0
-	}
-	return len(files)
-}
-
-func getCastsAmount(title string, scene string) int {
-	files, err := ioutil.ReadDir("data/" + title + "/" + scene + "/" + "asciicasts")
-	if err != nil {
-		log.Print(err)
-		return 0
-	}
-	return len(files)
-}
-
-func loadProject(title string) (*Project, error) {
-	scenesAmount := getScenesAmount(title)
-	allScenes := make(map[int][]int)
-	for i := 0; i < scenesAmount; i++ {
-		sceneTitle := fmt.Sprintf("scene_%d", i+1)
-		castsAmount := getCastsAmount(title, sceneTitle)
-		if castsAmount > 0 { // Empty scenes are ignored.
-			var allCasts []int
-			for j := 0; j < castsAmount; j++ {
-				allCasts = append(allCasts, j)
-			}
-			allScenes[i+1] = allCasts
-		}
-	}
-	return &Project{Title: title, Scenes: allScenes}, nil
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
@@ -98,6 +108,7 @@ func renderProject(w http.ResponseWriter, tmpl string, p *Project) {
 func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 	p, err := loadProject(title)
 	if err != nil { // The post hasn't been created yet.
+		log.Printf("Someone attempted to view %s but it hadn't been created yet.", title)
 		http.Redirect(w, r, "/post/"+title, http.StatusFound)
 		return
 	}

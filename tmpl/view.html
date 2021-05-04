@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>A project</title>
+
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/asciinema-player.css" />
+
+</head>
+
+<body>
+    <h1>{{.Title}}</h1>
+
+    {{$title := .Title}}
+    {{range $scene, $file := .Scenes}}
+    <div>
+        {{range $file}}
+        <asciinema-player src="/data/{{$title}}/scene_{{$scene}}/asciicasts/file_{{.}}.cast">
+        </asciinema-player>
+        {{end}}
+    </div>
+    {{end}}
+    <script src="/static/js/scripts.js"></script>
+    <script src="/static/js/asciinema-player.js"></script>
+</body>
+</html>

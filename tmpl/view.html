@@ -6,24 +6,47 @@
 
     <title>A project</title>
 
-    <link rel="stylesheet" href="/static/css/styles.css">
     <link rel="stylesheet" type="text/css" href="/static/css/asciinema-player.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/output.css" />
 
 </head>
 
-<body>
-    <h1>{{.Title}}</h1>
+<body class="bg-purple-200">
+<div class="container mx-auto"> 
+    <div class="p-2">
+    <p class="text-center font-bold text-4xl font-mono text-gray-200">
+        {{.Title}}
+    </p>
+    </div>
 
     {{$title := .Title}}
     {{range $scene, $file := .Scenes}}
-    <div>
+    <div class="grid justify-items-center container flex flex-col rounded shadow-lg bg-gray-100 box-border w-150">
         {{range $file}}
-        <asciinema-player src="/data/{{$title}}/scene_{{$scene}}/asciicasts/file_{{.}}.cast">
-        </asciinema-player>
+        <div class="p-6">
+			<audio class="play">
+				<source src="/data/{{$title}}/scene_{{$scene}}/audio/file_{{.}}.mp3" type="audio/mpeg">
+			</audio>
+            <asciinema-player
+                src="/data/{{$title}}/scene_{{$scene}}/asciicasts/file_{{.}}.cast" 
+                rows="24" 
+                cols="80"
+                id="scene_{{$scene}}-file_{{.}}"
+				class="play"
+                >
+            </asciinema-player>
+
+			<button type="button" onclick="playCast(this)" 
+			class="p-3 rounded-lg font-mono bg-purple-400 shadow-lg"
+			id="scene_{{$scene}}-audio_{{.}}">
+			Play
+			</button>
+        </div>
         {{end}}
     </div>
     {{end}}
     <script src="/static/js/scripts.js"></script>
     <script src="/static/js/asciinema-player.js"></script>
+</div>
 </body>
 </html>

@@ -49,3 +49,6 @@ _testmain.go
 /data/*
 
 run.sh
+
+static/css/output.css
+

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -39,19 +40,23 @@ func (p *Page) saveYaml() error {
 
 func getScenesAmount(title string) (int, error) {
 	files, err := filepath.Glob("data/" + title + "/" + "scene_*")
-	fmt.Println(files)
 	if err != nil {
 		return -1, err
+	}
+	if len(files) == 0 {
+		return -1, errors.New(fmt.Sprintf("Empty project: %s contains no scene.", title))
 	}
 	return len(files), nil
 }
 
 func getCastsAmount(title string, scene string) (int, error) {
 	files, err := filepath.Glob("data/" + title + "/" + scene + "/" + "asciicasts" + "/" + "file_*")
-	fmt.Println(files)
 	if err != nil {
 		log.Print(err)
 		return -1, err
+	}
+	if len(files) == 0 {
+		return -1, errors.New(fmt.Sprintf("Empty scene: %s contains no recording.", scene))
 	}
 	return len(files), nil
 }
@@ -76,7 +81,6 @@ func loadProject(title string) (*Project, error) {
 			allScenes[i+1] = allCasts
 		}
 	}
-	fmt.Println(allScenes)
 	return &Project{Title: title, Scenes: allScenes}, nil
 }
 

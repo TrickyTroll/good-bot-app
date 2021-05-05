@@ -3,14 +3,22 @@ function playCast(x) {
 	var cast = x.parentElement.querySelector('asciinema-player');
     var playPause = audio.getAttribute('class');
 
-    if (playPause === 'play') {
+	cast.addEventListener('play', function(e) {
         audio.play();
+        console.log("Audio playing")
+    }
+
+	cast.addEventListener('pause', function(e) {
+        audio.pause();
+        console.log("Audio paused")
+    }
+
+    if (playPause === 'play') {
 		cast.play();
         audio.setAttribute('class', 'pause');
 
     } else {
         cast.pause();
-		audio.pause();
         audio.setAttribute('class', 'play');
     }
 

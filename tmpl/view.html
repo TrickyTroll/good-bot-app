@@ -21,9 +21,9 @@
 
     {{$title := .Title}}
     {{range $scene, $file := .Scenes}}
-    <div class="grid justify-items-center container flex flex-col rounded shadow-lg bg-gray-100 box-border w-150">
+    <div class="">
         {{range $file}}
-        <div class="p-6">
+        <div class="flex content-center">
 			<audio class="play">
 				<source src="/data/{{$title}}/scene_{{$scene}}/audio/file_{{.}}.mp3" type="audio/mpeg">
 			</audio>
@@ -37,7 +37,7 @@
             </asciinema-player>
 
 			<button type="button" onclick="playCast(this)" 
-			class="p-3 rounded-lg font-mono bg-purple-400 shadow-lg"
+			class="p-3 rounded-lg font-mono bg-purple-400 shadow-lg p-4"
 			id="scene_{{$scene}}-audio_{{.}}">
 			Play
 			</button>

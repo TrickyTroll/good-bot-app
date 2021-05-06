@@ -154,6 +154,7 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.Handle("/data/", http.StripPrefix("/data/", http.FileServer(http.Dir("data"))))
+	http.Handle("/node_modules/", http.StripPrefix("/node_modules/", http.FileServer(http.Dir("node_modules"))))
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/post/", makeHandler(postHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))

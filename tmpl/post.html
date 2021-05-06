@@ -1,19 +1,58 @@
 <!doctype html>
+<html>
+	<head>
+		<title>New project</title>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="/static/css/output.css"/>
+	</head>
+	<body class="bg-purple-200">
 
-<html lang="en">
-<head>
-  <meta charset="utf-8">
+		<div class="container mx-auto">
+			<div class="conatiner-fluid p-2 m-4">
+				<p class="uppercase text-center font-semibold text-4xl font-mono text-gray-600">
+					{{.Title}}
+				</p>
+			</div>
+		<form method="get" id="MyForm">
 
-  <title>Making a post</title>
+			<div class="form-group">
+				<label for="Content">Content</label>
+				<div id="Content" style="min-height: 600px"></div>
+			</div>
 
-  <link rel="stylesheet" href="css/output.css">
+			<button class="btn btn-primary">Submit</button>
+		</form>
 
-</head>
-<body>
-	<h1>Editing {{.Title}}</h1>
-
-	<form action="/save/{{.Title}}" method="POST">
-		<div><textarea name="body" rows="20" cols="80">{{printf "%s" .Body}}</textarea></div>
-		<div><input type="submit" value="Save"></div>
-	</form>
-</body>
+		<script>
+			var require = {
+				paths: {
+					'vs': '/node_modules/monaco-editor/min/vs',
+				}
+			};
+		</script>
+		<script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
+		<script>
+			require(['vs/editor/editor.main'], () => {
+				// Initialize the editor
+				const editor = monaco.editor.create(document.getElementById("Content"), {
+					theme: 'vs-dark',
+					model: monaco.editor.createModel("1:\n\t- commands:\n\t\t- Write your script here.", "yaml"),	
+					wordWrap: 'on',
+					automaticLayout: true,
+					minimap: {
+						enabled: false
+					},
+					scrollbar: {
+						vertical: 'auto'
+					}
+				});
+				const form = document.getElementById("MyForm");
+				form.addEventListener("formdata", e =>
+				{
+					e.formData.append('content', editor.getModel().getValue());
+				});
+			});
+		</script>
+	</div>
+	</body>
+</html>

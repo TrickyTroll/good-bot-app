@@ -1,0 +1,22 @@
+{
+  "name": "good-bot-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "run.sh",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrickyTroll/good-bot-app.git"
+  },
+  "author": "Etienne Parent",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TrickyTroll/good-bot-app/issues"
+  },
+  "homepage": "https://github.com/TrickyTroll/good-bot-app#readme",
+  "dependencies": {
+    "monaco-editor": "^0.23.0"
+  }
+}

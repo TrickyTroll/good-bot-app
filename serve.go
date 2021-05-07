@@ -130,6 +130,7 @@ func postHandler(w http.ResponseWriter, r *http.Request, title string) {
 func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 	body := r.FormValue("body")
 	p := &Page{Title: title, Body: []byte(body)}
+	fmt.Println("Body: " + body)
 	err := p.save()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

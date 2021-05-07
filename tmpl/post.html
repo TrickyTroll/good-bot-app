@@ -13,15 +13,16 @@
 					{{.Title}}
 				</p>
 			</div>
-		<form method="get" id="MyForm">
-
-			<div class="form-group">
-				<label for="Content">Content</label>
-				<div id="Content" style="min-height: 600px"></div>
+        <div class="grid grid-cols-1 place-items-center">
+			<div id="editor" style="width:800px;height:600px;">
 			</div>
-
-			<button class="btn btn-primary">Submit</button>
-		</form>
+			<button 
+			class="bg-purple-400 m-4 shadow-xl font-mono text-gray-600 h-16 w-40 rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50 hover:text-gray-200 btn btn-primary"
+			id="submit-form"
+			onclick="save()">
+			Submit
+			</button>
+        </div>
 
 		<script>
 			var require = {
@@ -32,26 +33,41 @@
 		</script>
 		<script src="/node_modules/monaco-editor/min/vs/loader.js"></script>
 		<script>
-			require(['vs/editor/editor.main'], () => {
-				// Initialize the editor
-				const editor = monaco.editor.create(document.getElementById("Content"), {
-					theme: 'vs-dark',
-					model: monaco.editor.createModel("1:\n\t- commands:\n\t\t- Write your script here.", "yaml"),	
-					wordWrap: 'on',
-					automaticLayout: true,
-					minimap: {
-						enabled: false
-					},
-					scrollbar: {
-						vertical: 'auto'
-					}
-				});
-				const form = document.getElementById("MyForm");
-				form.addEventListener("formdata", e =>
-				{
-					e.formData.append('content', editor.getModel().getValue());
+			require.config({ paths: { 'vs': '/node_modules/monaco-editor/min/vs' }});
+			require(['vs/editor/editor.main'], function() {
+				window.editor = monaco.editor.create(document.getElementById('editor'), {
+					value: [
+						'1:',
+						'\t- commands:',
+						'\t\t- Write your script here.'
+					].join('\n'),
+					language: 'yaml'
 				});
 			});
+
+			function save() {
+				var value = window.editor.getValue()
+				const postData = async ( url = '/save/{{.Title}}', data = value)=>{
+					console.log(data);
+					  const response = await fetch(url, {
+					  method: 'POST', 
+					  credentials: 'same-origin',
+					  headers: {
+						  'Content-Type': 'application/json',
+					  },
+					  body: JSON.stringify(data), 
+					});
+
+					  try {
+						const newData = await response.json();
+						console.log(newData);
+						return newData;
+					  }catch(error) {
+					  console.log("error", error);
+					  }
+				  }
+				postData()
+			}
 		</script>
 	</div>
 	</body>

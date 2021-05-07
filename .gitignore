@@ -49,6 +49,7 @@ _testmain.go
 /data/*
 
 run.sh
+run-docker.sh
 build.sh
 
 static/css/output.css

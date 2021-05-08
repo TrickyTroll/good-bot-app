@@ -31,12 +31,10 @@ func (p *Page) save() error {
 	return ioutil.WriteFile(filename, p.Body, 0600)
 }
 
-/*
 func (p *Page) saveYaml() error {
 	filename := "data/" + p.Title + ".yaml"
 	return ioutil.WriteFile(filename, p.Body, 0600)
 }
-*/
 
 func getScenesAmount(title string) (int, error) {
 	files, err := filepath.Glob("data/" + title + "/" + "scene_*")
@@ -130,8 +128,7 @@ func postHandler(w http.ResponseWriter, r *http.Request, title string) {
 func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 	body := r.FormValue("body")
 	p := &Page{Title: title, Body: []byte(body)}
-	fmt.Println("Body: " + body)
-	err := p.save()
+	err := p.saveYaml()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

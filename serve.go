@@ -148,6 +148,8 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 			http.NotFound(w, r)
 			return
 		}
+		// runs the function (a handler)
+		// m is the page's title
 		fn(w, r, m[2])
 	}
 }

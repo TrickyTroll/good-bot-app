@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/TrickyTroll/good-bot-app#readme",
   "dependencies": {
-    "monaco-editor": "^0.23.0"
+    "monaco-editor": "^0.23.0",
+    "package.json": "^2.0.1"
   }
 }

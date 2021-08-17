@@ -95,14 +95,6 @@ func loadPage(title string) (*Page, error) {
 	// with correct info.
 }
 
-func loadHomePage() (*Page, error) {
-	body, err := ioutil.ReadFile("static/homepage.html")
-	if err != nil {
-		return nil, err
-	}
-	return &Page{Title: title, Body: body}, nil
-}
-
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 	err := templates.ExecuteTemplate(w, tmpl+".html", p)
 	if err != nil {
@@ -155,7 +147,10 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 		// If no match
 		if m == nil {
 			// Return to home page
-			http.Redirect(w, r, "/home.html", http.StatusFound)
+			p, err := loadHomePage()
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
 			return
 		}
 		// runs the function (a handler)

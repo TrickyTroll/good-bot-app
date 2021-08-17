@@ -95,6 +95,14 @@ func loadPage(title string) (*Page, error) {
 	// with correct info.
 }
 
+func loadHomePage() (*Page, error) {
+	body, err := ioutil.ReadFile("static/homepage.html")
+	if err != nil {
+		return nil, err
+	}
+	return &Page{Title: title, Body: body}, nil
+}
+
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
 	err := templates.ExecuteTemplate(w, tmpl+".html", p)
 	if err != nil {
@@ -144,8 +152,10 @@ var validPath = regexp.MustCompile("^/(post|save|view)/([a-zA-Z0-9]+)$")
 func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		m := validPath.FindStringSubmatch(r.URL.Path)
+		// If no match
 		if m == nil {
-			http.NotFound(w, r)
+			// Return to home page
+			http.Redirect(w, r, "/home.html", http.StatusFound)
 			return
 		}
 		// runs the function (a handler)

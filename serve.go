@@ -22,7 +22,7 @@ type Project struct {
 }
 
 // panics if error in ParseFiles
-var templates = template.Must(template.ParseFiles("tmpl/post.html", "tmpl/view.html"))
+var templates = template.Must(template.ParseFiles("tmpl/post.html", "tmpl/view.html", "tmpl/index.html"))
 
 // panics if regexp does not compile
 
@@ -147,7 +147,13 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 		// If no match
 		if m == nil {
 			// Return to home page
-			p, err := loadHomePage()
+			body, err := ioutil.ReadFile("tmpl/index.html")
+			if err != nil {
+				log.Printf("Got error trying to open tmpl/index.html\n%s", err)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+			p := &Page{Title: "home", Body: body}
+			renderTemplate(w, "index", p)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}

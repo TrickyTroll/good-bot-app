@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}New Post{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='post.css') }}">
+{% endblock %}
+{% block content %}
+  <h1>Your are creating a new post!</h1>
+  <div class="new-post">
+    <form method="POST" id="post-info" action="/post/record/{{ current_user.id }}">
+      <input type="text" name="title" placeholder="Your post title here" alt="write your post tile here"/>
+      <textarea name="contents" rows="20" onkeydown="useTab(this, event)" placeholder="Write your script here" cols="80" id="contents" alt="textarea for your script"></textarea>
+      <button alt="submit form">Submit</button>
+    </form>
+  </div>
+
+{% endblock %}

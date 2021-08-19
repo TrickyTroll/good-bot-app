@@ -1,0 +1,25 @@
+.new-post {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+#post-info {
+    display: grid;
+    align-items: center;
+}
+
+#post-info input{
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+#post-info textarea{
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+#post-info button {
+    padding: 1rem
+}

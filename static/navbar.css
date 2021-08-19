@@ -1,0 +1,25 @@
+#navbar ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    overflow: hidden;
+    border: 2px solid #e7e7e8;
+    background-color: #e7e7e8;
+    text-align: center;
+}
+
+#navbar ul li {
+    float: left;
+    color: white;
+}
+
+#navbar ul li a {
+  display: block;
+  padding: 14px 16px;
+  text-aligh: center;
+  text-decoration: none;
+}
+
+#navbar ul li a:hover{
+  background-color: #dddddd;
+}
